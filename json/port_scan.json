@@ -1,0 +1,27 @@
+{
+    "name": "Port Scanning",
+    "description": "Learn how to scan ports and understand network vulnerabilities.",
+    "chapters": {
+        "tutorial": {
+            "containers": ["attacker", "target"],
+            "html_path": "./contentsText/port_scan.html",
+            "compose_path": "./docker/portScan/compose.yaml",
+            "url": "None",
+            "description": "In this task, you will learn how to perform a basic Port Scanning attack."
+        },
+        "portscan": {
+            "containers": ["attacker", "target"],
+            "html_path": "./contentsText/port_scan.html",
+            "compose_path": "./docker/portScan/compose.yaml",
+            "url": "None",
+            "description": "This task introduces you to blind Port Scanning techniques."
+        },
+        "suricata": {
+            "containers": ["attacker", "target"],
+            "html_path": "./contentsText/port_scan.html",
+            "compose_path": "./docker/portScan/compose.yaml",
+            "url": "None",
+            "description": "In this advanced task, you will tackle more complex Port Scanning scenarios."
+        }
+    }
+}

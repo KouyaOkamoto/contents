@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>SQL Injection脆弱性の理解</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #2c5282;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        .code-example {
+            background: #1a1a1a;
+            color: #ffffff;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            font-family: monospace;
+        }
+        .vulnerability {
+            background: #fff5f5;
+            border-left: 4px solid #f56565;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .scenario {
+            background: #ebf8ff;
+            border-left: 4px solid #4299e1;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .note {
+            background: #f0fff4;
+            border-left: 4px solid #48bb78;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 0.9em;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #e2e8f0;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background: #f7fafc;
+        }
+        .warning {
+            color: #c53030;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SQL Injection脆弱性の理解</h1>
+
+        <div class="note">
+            <p>この教材は、セキュリティ専門家や開発者がSQL Injectionの脆弱性を理解し、適切な対策を講じるための学習を目的としています。</p>
+        </div>
+
+        <section>
+            <h2>1. 脆弱なログインフォームの例</h2>
+            <div class="scenario">
+                <h3>通常の実装例：</h3>
+                <div class="code-example">
+                    $query = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
+                </div>
+                <p>この実装では、ユーザー入力が直接SQLクエリに結合されています。</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>2. 脆弱性の種類</h2>
+            <table>
+                <tr>
+                    <th>入力パターン</th>
+                    <th>結果</th>
+                </tr>
+                <tr>
+                    <td>' OR '1'='1</td>
+                    <td>常にWHERE句が真となり、全データが取得される</td>
+                </tr>
+                <tr>
+                    <td>'; DROP TABLE users; --</td>
+                    <td>テーブルの削除が実行される</td>
+                </tr>
+                <tr>
+                    <td>' UNION SELECT username,password FROM users --</td>
+                    <td>別テーブルのデータが取得される</td>
+                </tr>
+            </table>
+        </section>
+
+        <section>
+            <h2>3. 脆弱性が存在する典型的なケース</h2>
+            <div class="vulnerability">
+                <h3>危険な実装パターン:</h3>
+                <ul>
+                    <li>動的SQL文の構築
+                        <div class="code-example">
+                            $query = "SELECT * FROM products WHERE category = '" . $_GET['category'] . "'";
+                        </div>
+                    </li>
+                    <li>エスケープ処理の欠如
+                        <div class="code-example">
+                            $query = "SELECT * FROM users WHERE id = " . $_GET['id'];
+                        </div>
+                    </li>
+                    <li>IN句での文字列結合
+                        <div class="code-example">
+                            $query = "SELECT * FROM orders WHERE status IN (" . $_GET['status'] . ")";
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>4. 脆弱性の影響</h2>
+            <div class="scenario">
+                <h3>想定される被害:</h3>
+                <ul>
+                    <li>データベース内の全情報の漏洩</li>
+                    <li>データベースの改ざん・破壊</li>
+                    <li>認証バイパス</li>
+                    <li>権限昇格</li>
+                    <li>バックエンドサーバーへの追加攻撃</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>5. 実際の動作の理解</h2>
+            <div class="vulnerability">
+                <h3>ログインバイパスの例:</h3>
+                <p>正常なクエリ：</p>
+                <div class="code-example">
+                    SELECT * FROM users WHERE username = 'alice' AND password = 'secret123'
+                </div>
+                <p>悪意のある入力後のクエリ：</p>
+                <div class="code-example">
+                    SELECT * FROM users WHERE username = 'admin' OR '1'='1' -- ' AND password = 'anything'
+                </div>
+                <p>この結果、パスワードチェックが無効化され、管理者アカウントでログインできてしまいます。</p>
+            </div>
+        </section>
+
+        <div class="note">
+            <h3>重要な注意点：</h3>
+            <p>この知識は、セキュリティ向上のための教育目的でのみ使用してください。実際のシステムに対する不正アクセスは違法行為となります。</p>
+        </div>
+    </div>
+</body>
+</html>

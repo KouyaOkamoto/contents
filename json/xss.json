@@ -1,0 +1,27 @@
+{
+    "name": "Cross-Site Scripting (XSS)",
+    "description": "Understand the mechanics of XSS and mitigation techniques.",
+    "chapters": {
+        "tutorial": {
+            "containers": ["attacker", "target"],
+            "html_path": "./contents/html/port_scan.html",
+            "compose_path": "./docker/compose.yaml",
+            "url": "None",
+            "description": "In this task, you will learn how to perform a basic XSS attack."
+        },
+        "attack": {
+            "containers": ["attacker", "target"],
+            "html_path": "./contents/html/port_scan.html",
+            "compose_path": "./docker/compose.yaml",
+            "url": "None",
+            "description": "This task introduces you to blind XSS techniques."
+        },
+        "defence": {
+            "containers": ["attacker", "target"],
+            "html_path": "./contents/html/port_scan.html",
+            "compose_path": "./docker/compose.yaml",
+            "url": "None",
+            "description": "In this advanced task, you will tackle more complex XSS scenarios."
+        }
+    }
+}
