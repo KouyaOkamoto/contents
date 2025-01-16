@@ -1,14 +1,14 @@
 {
     "name": "Port Scanning",
-    "description": "change for test 2025/01/10",
+    "description": "change for test 2025/01/16",
     "chapters": {
         "tutorial": {
             "containers": [
                 "attacker",
                 "target"
             ],
-            "html_path": "./contentsText/port_scan.html",
-            "compose_path": "./docker/portScan/compose.yaml",
+            "html_path": "./KouyaOkamoto_contents/contents/html/port_scan.html",
+            "compose_path": "./KouyaOkamoto_contents/contents/docker/portScan/compose.yaml",
             "url": "None",
             "description": "In this task, you will learn how to perform a basic Port Scanning attack."
         },
@@ -17,8 +17,8 @@
                 "attacker",
                 "target"
             ],
-            "html_path": "./contentsText/port_scan.html",
-            "compose_path": "./docker/portScan/compose.yaml",
+            "html_path": "./KouyaOkamoto_contents/contents/html/port_scan.html",
+            "compose_path": "./KouyaOkamoto_contents/contents/docker/portScan/compose.yaml",
             "url": "None",
             "description": "This task introduces you to blind Port Scanning techniques."
         },
@@ -27,8 +27,8 @@
                 "attacker",
                 "target"
             ],
-            "html_path": "./contentsText/port_scan.html",
-            "compose_path": "./docker/portScan/compose.yaml",
+            "html_path": "./KouyaOkamoto_contents/contents/html/port_scan.html",
+            "compose_path": "./KouyaOkamoto_contents/contents/docker/portScan/compose.yaml",
             "url": "None",
             "description": "In this advanced task, you will tackle more complex Port Scanning scenarios."
         }
