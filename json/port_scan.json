@@ -8,7 +8,7 @@
                 "target"
             ],
             "html_path": "./KouyaOkamoto_contents/contents/html/port_scan.html",
-            "compose_path": "./KouyaOkamoto_contents/contents/docker/portScan/compose.yaml",
+            "compose_path": "./KouyaOkamoto_contents/contents/docker/port_scan/compose.yaml",
             "url": "None",
             "description": "In this task, you will learn how to perform a basic Port Scanning attack."
         },
@@ -18,7 +18,7 @@
                 "target"
             ],
             "html_path": "./KouyaOkamoto_contents/contents/html/port_scan.html",
-            "compose_path": "./KouyaOkamoto_contents/contents/docker/portScan/compose.yaml",
+            "compose_path": "./KouyaOkamoto_contents/contents/docker/port_scan/compose.yaml",
             "url": "None",
             "description": "This task introduces you to blind Port Scanning techniques."
         },
@@ -28,7 +28,7 @@
                 "target"
             ],
             "html_path": "./KouyaOkamoto_contents/contents/html/port_scan.html",
-            "compose_path": "./KouyaOkamoto_contents/contents/docker/portScan/compose.yaml",
+            "compose_path": "./KouyaOkamoto_contents/contents/docker/port_scan/compose.yaml",
             "url": "None",
             "description": "In this advanced task, you will tackle more complex Port Scanning scenarios."
         }
