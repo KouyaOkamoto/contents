@@ -3,25 +3,25 @@
     "description": "Learn how SQL Injection works and how to prevent it.",
     "chapters": {
         "tutorial": {
-            "containers": ["web", "db"],
-            "html_path": "./contentsText/sql.html",
-            "compose_path" : "./docker/SQLInjection/tutorial/compose.yaml",
+            "containers": [
+                "web",
+                "db"
+            ],
+            "html_path": "./KouyaOkamoto_contents/contents/html/sql.html",
+            "compose_path": "./KouyaOkamoto_contents/contents/docker/SQLInjection/tutorial/compose.yaml",
             "url": "http://localhost:8080",
             "description": "In this task, you will learn how to perform a basic SQL injection attack."
         },
         "attack": {
-            "containers": ["web", "db"],
-            "html_path": "./contentsText/sql.html",
-            "compose_path" : "./docker/SQLInjection/attack/compose.yaml",
+            "containers": [
+                "web",
+                "db"
+            ],
+            "html_path": "./KouyaOkamoto_contents/contents/html/sql.html",
+            "compose_path": "./KouyaOkamoto_contents/contents/docker/SQLInjection/attack/compose.yaml",
             "url": "http://localhost:8080",
             "description": "This task introduces you to blind SQL injection techniques."
-        },
-        "defence": {
-            "containers": ["web", "db"],
-            "html_path": "./contentsText/sql.html",
-            "compose_path" : "./docker/SQLInjection/compose.yaml",
-            "url": "http://localhost:8080",
-            "description": "In this advanced task, you will tackle more complex SQL injection scenarios."
         }
-    }
+    },
+    "id": "sql_injection"
 }
