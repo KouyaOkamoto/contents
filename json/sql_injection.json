@@ -8,7 +8,7 @@
                 "db"
             ],
             "html_path": "./KouyaOkamoto_contents/contents/html/sql.html",
-            "compose_path": "./KouyaOkamoto_contents/contents/docker/SQLInjection/tutorial/compose.yaml",
+            "compose_path": "./KouyaOkamoto_contents/contents/docker/sql_injection/tutorial/compose.yaml",
             "url": "http://localhost:8080",
             "description": "In this task, you will learn how to perform a basic SQL injection attack."
         },
@@ -18,7 +18,7 @@
                 "db"
             ],
             "html_path": "./KouyaOkamoto_contents/contents/html/sql.html",
-            "compose_path": "./KouyaOkamoto_contents/contents/docker/SQLInjection/attack/compose.yaml",
+            "compose_path": "./KouyaOkamoto_contents/contents/docker/sql_injection/attack/compose.yaml",
             "url": "http://localhost:8080",
             "description": "This task introduces you to blind SQL injection techniques."
         }
