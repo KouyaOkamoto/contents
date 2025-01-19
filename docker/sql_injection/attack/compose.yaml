@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   web:
+    image: oka49132/sqlinjection-attack-web:latest
     build:
       context: .
       dockerfile: Dockerfile
@@ -15,7 +16,7 @@ services:
       - app-network
 
   db:
-    image: mysql:8.0
+    image: oka49132/sqlinjection-attack-db:latest
     command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: root_password
