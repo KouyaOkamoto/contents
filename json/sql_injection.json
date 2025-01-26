@@ -2,7 +2,7 @@
     "name": "SQL Injection",
     "description": "Learn how SQL Injection works and how to prevent it.",
     "chapters": {
-        "tutorial": {
+        "Attack": {
             "containers": [
                 "web",
                 "db"
@@ -12,7 +12,7 @@
             "url": "http://localhost:8080",
             "description": "In this task, you will learn how to perform a basic SQL injection attack."
         },
-        "attack": {
+        "Defense": {
             "containers": [
                 "web",
                 "db"
@@ -20,6 +20,16 @@
             "html_path": "./KouyaOkamoto_contents/contents/html/sql.html",
             "compose_path": "./KouyaOkamoto_contents/contents/docker/sql_injection/attack/compose.yaml",
             "url": "http://localhost:8080",
+            "description": "This task introduces you to blind SQL injection techniques."
+        },
+        "Advance": {
+            "containers": [
+                "web",
+                "db"
+            ],
+            "html_path": "./KouyaOkamoto_contents/contents/html/sql.html",
+            "compose_path": "./KouyaOkamoto_contents/contents/docker/sql_injection/attack/compose.yaml",
+            "url": "None",
             "description": "This task introduces you to blind SQL injection techniques."
         }
     },
