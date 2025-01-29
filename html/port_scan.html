@@ -134,9 +134,46 @@
         <section id="intro" class="learning-section">
             <h2>はじめに</h2>
             <div class="alert alert-warning">
-                <strong>重要:</strong> このチュートリアルは教育目的のみを意図しています。実際の環境での実施には適切な許可が必要です。
+                <strong>重要な注意事項:</strong>
+                <ul>
+                    <li>このチュートリアルは教育目的のみを意図しています</li>
+                    <li>実際の環境でのポートスキャンには、対象システムの所有者または管理者からの明示的な許可が必要です</li>
+                    <li>許可のない環境でのポートスキャンは、法律違反となる可能性があります</li>
+                    <li>学習は必ず管理された安全な環境で行ってください</li>
+                </ul>
             </div>
-            <p>ポートスキャンは、ネットワークセキュリティにおける重要な技術の一つです。このページでは、主要なツールの使用方法と基礎知識を学習します。</p>
+        
+            <h3>ポートスキャンとは</h3>
+            <p>ポートスキャンとは、ネットワーク上のホストの特定のポートに対して接続を試み、そのポートが開いているか（サービスが稼働しているか）、閉じているか、あるいはファイアウォールでブロックされているかを確認する技術です。</p>
+            
+            <p>主に以下のような情報を収集することができます：</p>
+            <ul>
+                <li>開いているポートの特定</li>
+                <li>稼働中のサービスの種類とバージョン</li>
+                <li>使用されているオペレーティングシステム</li>
+                <li>ネットワーク上のアクティブなホストの検出</li>
+            </ul>
+        
+            <h3>実務での利用例</h3>
+            <p>ポートスキャンは、以下のような正当な業務目的で使用されています：</p>
+            <ul>
+                <li><strong>システム監査：</strong>組織のネットワークセキュリティポリシーへの準拠確認</li>
+                <li><strong>脆弱性診断：</strong>セキュリティ診断の一環として、不必要に開放されているポートの特定</li>
+                <li><strong>ネットワーク管理：</strong>システム管理者によるネットワークの健全性確認</li>
+                <li><strong>インシデント対応：</strong>セキュリティインシデント発生時の影響範囲の特定</li>
+                <li><strong>システム構築時の確認：</strong>新規サーバー構築時の設定確認</li>
+            </ul>
+        
+            <h3>基本的なスキャンの種類</h3>
+            <p>代表的なスキャン手法には以下のようなものがあります：</p>
+            <ul>
+                <li><strong>TCP接続スキャン：</strong>完全なTCP接続を確立する基本的なスキャン方式</li>
+                <li><strong>SYNスキャン：</strong>TCP接続の確立を完了せず、SYNパケットの応答のみを確認</li>
+                <li><strong>UDPスキャン：</strong>UDPポートの開閉状態を確認</li>
+                <li><strong>バージョン検出：</strong>開いているポートで動作するサービスのバージョン情報を取得</li>
+            </ul>
+        
+            <p>このチュートリアルでは、主要なポートスキャンツールである ping、hping3、nmapの基本的な使用方法を学びます。これらのツールの特徴を理解し、適切に使用できるようになることを目指します。</p>
         </section>
 
         <section id="basics" class="learning-section">
@@ -160,72 +197,234 @@
             
             <div class="practice-box">
                 <h3>1. ping - 基本的な疎通確認</h3>
+                <p>pingはICMP（Internet Control Message Protocol）を使用して、対象ホストとの疎通確認を行うための最も基本的なツールです。</p>
+                
                 <div class="command-box">
-                    # 基本的な使用方法<br>
+                    # 基本的な使用方法（Ctrl+Cで停止）<br>
                     ping [対象IP]<br>
                     
-                    <br># 回数を指定して実行<br>
-                    ping -c 4 [対象IP]
+                    <br># 回数を指定して実行（4回）<br>
+                    ping -c 4 [対象IP]<br>
+        
+                    <br># タイムアウト時間を指定（3秒）<br>
+                    ping -W 3 [対象IP]<br>
+        
+                    <br># パケットサイズを指定（500バイト）<br>
+                    ping -s 500 [対象IP]
                 </div>
+        
                 <div class="output-box">
                     64 bytes from 192.168.1.1: icmp_seq=1 ttl=64 time=0.089 ms<br>
                     64 bytes from 192.168.1.1: icmp_seq=2 ttl=64 time=0.075 ms
                 </div>
+        
+                <p><strong>出力の解釈：</strong></p>
+                <ul>
+                    <li><code>bytes</code>: 受信したパケットサイズ</li>
+                    <li><code>ttl</code>: Time To Live（パケットの生存時間）</li>
+                    <li><code>time</code>: 往復時間（ミリ秒）</li>
+                    <li><code>icmp_seq</code>: シーケンス番号（パケットの順序）</li>
+                </ul>
             </div>
-
+        
             <div class="practice-box">
                 <h3>2. hping3 - 高度なパケット操作</h3>
+                <p>hping3は、pingよりも詳細なパケット制御が可能なツールです。TCP/IP解析、ポートスキャン、ファイアウォールテストなどに使用されます。</p>
+        
                 <div class="command-box">
-                    # TCP SYNスキャン<br>
+                    # TCP SYNスキャン（-S: SYNフラグ）<br>
                     hping3 -S [対象IP] -p 80<br>
                     
                     <br># ポート範囲スキャン<br>
-                    hping3 -S [対象IP] --scan 20-25
+                    hping3 -S [対象IP] --scan 20-25<br>
+        
+                    <br># 送信元ポートを指定（-s）<br>
+                    hping3 -S [対象IP] -s 5050 -p 80<br>
+        
+                    <br># 送信間隔を制御（-i: インターバル）<br>
+                    hping3 -S [対象IP] -p 80 -i u100
                 </div>
+        
+                <p><strong>主要なオプション：</strong></p>
+                <ul>
+                    <li><code>-S</code>: SYNフラグを設定</li>
+                    <li><code>-p</code>: 対象ポートを指定</li>
+                    <li><code>-i</code>: パケット送信間隔（u100は100マイクロ秒）</li>
+                    <li><code>--scan</code>: ポート範囲スキャン</li>
+                </ul>
             </div>
-
+        
             <div class="practice-box">
                 <h3>3. nmap - 包括的なポートスキャン</h3>
+                <p>nmapは最も広く使用されているポートスキャンツールで、多様なスキャン方式とホスト探索機能を提供します。</p>
+        
                 <div class="command-box">
-                    # 基本スキャン<br>
-                    nmap [対象IP]<br>
-
-                    <br># 同一のネットワークに存在する端末のIP取得<br>
+                    # ネットワーク上のホスト探索（pingスキャン）<br>
                     nmap -sn [ネットワークアドレス]<br>
                     
-                    <br># SYNスキャン<br>
+                    <br># 基本的なTCPスキャン（上位1000ポート）<br>
+                    nmap [対象IP]<br>
+                    
+                    <br># SYNスキャン（ステルス）<br>
                     nmap -sS [対象IP]<br>
                     
-                    <br># バージョン検出<br>
-                    nmap -sV [対象IP]
+                    <br># バージョン検出を含む詳細スキャン<br>
+                    nmap -sV [対象IP]<br>
+        
+                    <br># 特定のポート範囲をスキャン<br>
+                    nmap -p 20-100 [対象IP]<br>
+        
+                    <br># スキャン速度の制御（T1:遅い → T5:速い）<br>
+                    nmap -T4 [対象IP]
                 </div>
+        
+                <p><strong>主要なスキャンオプション：</strong></p>
+                <ul>
+                    <li><code>-sn</code>: pingスキャン（ポートスキャンなし）</li>
+                    <li><code>-sS</code>: TCP SYNスキャン</li>
+                    <li><code>-sV</code>: バージョン検出</li>
+                    <li><code>-p</code>: ポート指定（例: -p 80,443 または -p 1-1000）</li>
+                    <li><code>-T[0-5]</code>: タイミングテンプレート（スキャン速度）</li>
+                </ul>
+        
+                <p><strong>ポートの状態：</strong></p>
+                <ul>
+                    <li><code>open</code>: ポートが開いており、アプリケーションが待ち受け</li>
+                    <li><code>closed</code>: ポートが閉じている</li>
+                    <li><code>filtered</code>: フィルタリングされており、状態を判定できない</li>
+                    <li><code>unfiltered</code>: フィルタリングされていないが、open/closedは不明</li>
+                </ul>
+            </div>
+        
+            <div class="alert alert-warning">
+                <strong>スキャン実行時の注意点：</strong>
+                <ul>
+                    <li>スキャンは対象システムに負荷をかける可能性があります</li>
+                    <li>急速なスキャンは検知されやすく、また対象システムに悪影響を与える可能性があります</li>
+                    <li>実環境では適切なスキャン速度（-T3程度）の使用を推奨します</li>
+                </ul>
             </div>
         </section>
 
         <section id="practice" class="learning-section">
             <h2>演習</h2>
             <div class="practice-box">
-                <h3>演習1: 基本的なスキャン</h3>
-                <p>以下の手順で、基本的なポートスキャンを実施してみましょう：</p>
+                <h3>演習1: ホスト探索</h3>
+                <p>まずは、Docker環境内のホストを探索する基本的な演習を行います。</p>
+                
                 <ol>
-                    <li>nmapを使用して対象のIPアドレスを調べる</li>
-                    <li>nmapによる基本スキャン</li>
-                    <li>結果の解析と評価</li>
+                    <li>pingによる単一ホストの疎通確認
+                        <div class="command-box">
+                            # 単一ホストへの ping<br>
+                            ping -c 4 [対象のIPアドレス]
+                        </div>
+                    </li>
+                    <li>nmapによるネットワークの探索
+                        <div class="command-box">
+                            # ネットワーク内のホスト探索<br>
+                            nmap -sn [ネットワークアドレス]/24
+                        </div>
+                    </li>
                 </ol>
-                <div class="command-box">
-                    # 演習用コマンド<br>
-                    nmap [オプション] [ネットワークアドレス]<br>
-                    nmap [対象IP]
-                </div>
+        
+                <p><strong>確認ポイント：</strong></p>
+                <ul>
+                    <li>ping応答の有無と応答時間</li>
+                    <li>ネットワーク上で発見されたホストの数</li>
+                    <li>各ホストのIPアドレス</li>
+                </ul>
             </div>
-
+        
             <div class="practice-box">
-                <h3>演習2: 詳細スキャン</h3>
-                <p>演習1の結果をもとに開いているポートに対してバージョン検出を行います：</p>
-                <div class="command-box">
-                    # Webサーバーのバージョン検出<br>
-                    nmap [オプション] -p [ポート番号] [対象IP]
-                </div>
+                <h3>演習2: 基本的なポートスキャン</h3>
+                <p>特定のホストに対して、基本的なポートスキャンを実施します。</p>
+                
+                <ol>
+                    <li>よく使用されるポートのスキャン
+                        <div class="command-box">
+                            # 代表的なポートのスキャン<br>
+                            nmap -p 20,21,22,23,25,53,80,443 [対象のIPアドレス]
+                        </div>
+                    </li>
+                    <li>上位1000ポートのスキャン
+                        <div class="command-box">
+                            # デフォルトスキャン<br>
+                            nmap [対象のIPアドレス]
+                        </div>
+                    </li>
+                </ol>
+        
+                <p><strong>確認ポイント：</strong></p>
+                <ul>
+                    <li>開いているポートの特定</li>
+                    <li>各ポートの状態（open/closed/filtered）の確認</li>
+                    <li>検出されたサービスの種類</li>
+                </ul>
+            </div>
+        
+            <div class="practice-box">
+                <h3>演習3: 詳細スキャン</h3>
+                <p>演習2で発見されたポートに対して、より詳細な情報を収集します。</p>
+        
+                <ol>
+                    <li>バージョン検出を含むスキャン
+                        <div class="command-box">
+                            # バージョン検出スキャン<br>
+                            nmap -sV -p [検出されたポート] [対象のIPアドレス]
+                        </div>
+                    </li>
+                    <li>TCPスキャンとUDPスキャンの併用
+                        <div class="command-box">
+                            # TCP/UDPスキャン<br>
+                            nmap -sS -sU -p [検出されたポート] [対象のIPアドレス]
+                        </div>
+                    </li>
+                </ol>
+        
+                <p><strong>確認ポイント：</strong></p>
+                <ul>
+                    <li>検出されたサービスのバージョン情報</li>
+                    <li>TCP/UDPポートの違いによる応答の違い</li>
+                    <li>サービスの詳細情報</li>
+                </ul>
+            </div>
+        
+            <div class="practice-box">
+                <h3>演習4: 高度なスキャン</h3>
+                <p>より高度なスキャン技術を使用して、詳細な情報収集を行います。</p>
+        
+                <ol>
+                    <li>hping3によるカスタマイズされたスキャン
+                        <div class="command-box">
+                            # カスタムTCPスキャン<br>
+                            hping3 -S -p 80 -c 4 [対象のIPアドレス]
+                        </div>
+                    </li>
+                    <li>nmapのタイミング調整とスキャン
+                        <div class="command-box">
+                            # タイミング調整付きスキャン<br>
+                            nmap -T3 -p- [対象のIPアドレス]    # 全ポートをスキャン
+                        </div>
+                    </li>
+                </ol>
+        
+                <p><strong>確認ポイント：</strong></p>
+                <ul>
+                    <li>スキャン速度の違いによる結果の変化</li>
+                    <li>カスタマイズされたパケットに対する応答の違い</li>
+                    <li>全ポートスキャンの所要時間と結果の違い</li>
+                </ul>
+            </div>
+        
+            <div class="practice-box">
+                <h3>演習結果のまとめ</h3>
+                <p>各演習の結果について、以下の項目をまとめましょう：</p>
+                <ul>
+                    <li>発見されたホスト数とアクティブなポート</li>
+                    <li>検出されたサービスとそのバージョン</li>
+                    <li>異なるスキャン方法による結果の違い</li>
+                    <li>スキャン実行時の注意点や気づいた点</li>
+                </ul>
             </div>
         </section>
     </main>
