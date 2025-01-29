@@ -2,172 +2,264 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>SQL Injection脆弱性の理解</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQLインジェクション学習ポータル</title>
     <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --warning-color: #f1c40f;
+            --danger-color: #e74c3c;
+            --text-color: #333;
+        }
+
         body {
             font-family: 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
-            max-width: 800px;
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        nav {
+            background-color: var(--secondary-color);
+            padding: 1rem;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        nav ul li {
+            padding: 0 1rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        main {
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
+            padding: 2rem;
         }
-        .container {
-            background: white;
-            padding: 30px;
+
+        .learning-section {
+            background-color: #f9f9f9;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
         }
-        h1, h2 {
-            color: #2c5282;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 10px;
-        }
-        .code-example {
-            background: #1a1a1a;
-            color: #ffffff;
-            padding: 15px;
+
+        .alert {
+            padding: 1rem;
             border-radius: 4px;
-            margin: 15px 0;
+            margin-bottom: 1rem;
+        }
+
+        .alert-warning {
+            background-color: var(--warning-color);
+            color: #000;
+        }
+
+        .alert-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .practice-box {
+            border: 2px solid var(--secondary-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .code-box {
+            background-color: #2c3e50;
+            color: #ffffff;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
             font-family: monospace;
         }
-        .vulnerability {
-            background: #fff5f5;
-            border-left: 4px solid #f56565;
-            padding: 15px;
-            margin: 15px 0;
-        }
-        .scenario {
-            background: #ebf8ff;
-            border-left: 4px solid #4299e1;
-            padding: 15px;
-            margin: 15px 0;
-        }
-        .note {
-            background: #f0fff4;
-            border-left: 4px solid #48bb78;
-            padding: 15px;
-            margin: 15px 0;
-            font-size: 0.9em;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 15px 0;
-        }
-        th, td {
-            border: 1px solid #e2e8f0;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background: #f7fafc;
-        }
-        .warning {
-            color: #c53030;
-            font-weight: bold;
+
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>SQL Injection脆弱性の理解</h1>
+    <header>
+        <h1>SQLインジェクション学習ポータル</h1>
+        <p>Webアプリケーションセキュリティの基礎を学ぼう</p>
+    </header>
 
-        <div class="note">
-            <p>この教材は、セキュリティ専門家や開発者がSQL Injectionの脆弱性を理解し、適切な対策を講じるための学習を目的としています。</p>
-        </div>
+    <nav>
+        <ul>
+            <li><a href="#intro">はじめに</a></li>
+            <li><a href="#basics">基礎知識</a></li>
+            <li><a href="#examples">実装例</a></li>
+            <li><a href="#practice">演習</a></li>
+        </ul>
+    </nav>
 
-        <section>
-            <h2>1. 脆弱なログインフォームの例</h2>
-            <div class="scenario">
-                <h3>通常の実装例：</h3>
-                <div class="code-example">
-                    $query = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
+    <main>
+        <section id="intro" class="learning-section">
+            <h2>はじめに</h2>
+            <div class="alert alert-warning">
+                <strong>重要:</strong> このチュートリアルは教育目的のみを意図しています。実際のシステムに対する不正アクセスは違法行為となります。
+            </div>
+            <p>SQLインジェクションは、Webアプリケーションに対する最も一般的な攻撃の一つです。この脆弱性を理解し、適切な対策を講じることは、セキュアなアプリケーション開発において非常に重要です。</p>
+
+            <h3>SQLインジェクションとは</h3>
+            <p>SQLインジェクションとは、Webアプリケーションのデータベースに対して、意図しないSQLコマンドを挿入・実行させる攻撃手法です。主に以下のような状況で発生します：</p>
+            <ul>
+                <li>ユーザー入力値を適切にサニタイズせずにSQL文を組み立てる場合</li>
+                <li>プリペアドステートメントを使用していない場合</li>
+                <li>入力値のバリデーションが不十分な場合</li>
+            </ul>
+        </section>
+
+        <section id="basics" class="learning-section">
+            <h2>基礎知識</h2>
+            <h3>SQLインジェクションの種類</h3>
+            <div class="practice-box">
+                <h4>1. Error-based SQLインジェクション</h4>
+                <p>データベースのエラーメッセージを利用して情報を取得する手法</p>
+                <div class="code-box">
+                    # エラーを引き起こす入力例<br>
+                    ' OR (SELECT 1 FROM (SELECT 1) x) -- 
                 </div>
-                <p>この実装では、ユーザー入力が直接SQLクエリに結合されています。</p>
+            </div>
+
+            <div class="practice-box">
+                <h4>2. Union-based SQLインジェクション</h4>
+                <p>UNION句を使用して別のクエリ結果を結合する手法</p>
+                <div class="code-box">
+                    # UNION句を使用した攻撃例<br>
+                    ' UNION SELECT username, password FROM users -- 
+                </div>
+            </div>
+
+            <div class="practice-box">
+                <h4>3. Blind SQLインジェクション</h4>
+                <p>直接的な結果を見ることができない場合の手法</p>
+                <div class="code-box">
+                    # 真偽値による判定<br>
+                    ' AND 1=1 -- <br>
+                    ' AND 1=2 -- 
+                </div>
             </div>
         </section>
 
-        <section>
-            <h2>2. 脆弱性の種類</h2>
-            <table>
-                <tr>
-                    <th>入力パターン</th>
-                    <th>結果</th>
-                </tr>
-                <tr>
-                    <td>' OR '1'='1</td>
-                    <td>常にWHERE句が真となり、全データが取得される</td>
-                </tr>
-                <tr>
-                    <td>'; DROP TABLE users; --</td>
-                    <td>テーブルの削除が実行される</td>
-                </tr>
-                <tr>
-                    <td>' UNION SELECT username,password FROM users --</td>
-                    <td>別テーブルのデータが取得される</td>
-                </tr>
-            </table>
-        </section>
+        <section id="examples" class="learning-section">
+            <h2>実装例と対策</h2>
+            
+            <div class="practice-box">
+                <h3>脆弱な実装例</h3>
+                <div class="code-box">
+                    // 危険な実装<br>
+                    $query = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";<br>
+                    $result = mysqli_query($conn, $query);
+                </div>
+            </div>
 
-        <section>
-            <h2>3. 脆弱性が存在する典型的なケース</h2>
-            <div class="vulnerability">
-                <h3>危険な実装パターン:</h3>
+            <div class="practice-box">
+                <h3>安全な実装例</h3>
+                <div class="code-box">
+                    // プリペアドステートメントを使用<br>
+                    $stmt = $conn->prepare("SELECT * FROM users WHERE username = ? AND password = ?");<br>
+                    $stmt->bind_param("ss", $username, $password);<br>
+                    $stmt->execute();
+                </div>
+            </div>
+
+            <div class="practice-box">
+                <h3>主な対策方法</h3>
                 <ul>
-                    <li>動的SQL文の構築
-                        <div class="code-example">
-                            $query = "SELECT * FROM products WHERE category = '" . $_GET['category'] . "'";
-                        </div>
-                    </li>
-                    <li>エスケープ処理の欠如
-                        <div class="code-example">
-                            $query = "SELECT * FROM users WHERE id = " . $_GET['id'];
-                        </div>
-                    </li>
-                    <li>IN句での文字列結合
-                        <div class="code-example">
-                            $query = "SELECT * FROM orders WHERE status IN (" . $_GET['status'] . ")";
-                        </div>
-                    </li>
+                    <li>プリペアドステートメントの使用</li>
+                    <li>エスケープ処理の実施</li>
+                    <li>入力値のバリデーション</li>
+                    <li>データベースユーザーの権限制限</li>
+                    <li>エラーメッセージの適切な処理</li>
                 </ul>
             </div>
         </section>
 
-        <section>
-            <h2>4. 脆弱性の影響</h2>
-            <div class="scenario">
-                <h3>想定される被害:</h3>
+        <section id="practice" class="learning-section">
+            <h2>演習</h2>
+            
+            <div class="alert alert-warning">
+                <strong>演習を始める前に：</strong>
                 <ul>
-                    <li>データベース内の全情報の漏洩</li>
-                    <li>データベースの改ざん・破壊</li>
-                    <li>認証バイパス</li>
-                    <li>権限昇格</li>
-                    <li>バックエンドサーバーへの追加攻撃</li>
+                    <li>すべての演習は、許可された環境で実施してください</li>
+                    <li>提供された演習環境以外での試行は行わないでください</li>
+                    <li>各演習の結果は、必ずメモを取るようにしましょう</li>
                 </ul>
             </div>
-        </section>
 
-        <section>
-            <h2>5. 実際の動作の理解</h2>
-            <div class="vulnerability">
-                <h3>ログインバイパスの例:</h3>
-                <p>正常なクエリ：</p>
-                <div class="code-example">
-                    SELECT * FROM users WHERE username = 'alice' AND password = 'secret123'
+            <div class="practice-box">
+                <h3>演習1: 基本的なSQLインジェクション</h3>
+                <p>単純なログインフォームに対するSQLインジェクションを試してみましょう。</p>
+                <div class="code-box">
+                    # テスト用入力値<br>
+                    username: admin' -- <br>
+                    password: anything
                 </div>
-                <p>悪意のある入力後のクエリ：</p>
-                <div class="code-example">
-                    SELECT * FROM users WHERE username = 'admin' OR '1'='1' -- ' AND password = 'anything'
+            </div>
+
+            <div class="practice-box">
+                <h3>演習2: UNIONベースの攻撃</h3>
+                <p>UNION句を使用して追加の情報を取得する手法を学びます。</p>
+                <div class="code-box">
+                    # テスト用入力値<br>
+                    ' UNION SELECT NULL,NULL -- <br>
+                    ' UNION SELECT table_name,NULL FROM information_schema.tables -- 
                 </div>
-                <p>この結果、パスワードチェックが無効化され、管理者アカウントでログインできてしまいます。</p>
+            </div>
+
+            <div class="practice-box">
+                <h3>演習3: Blindインジェクション</h3>
+                <p>直接的な結果が見えない場合の情報取得手法を学びます。</p>
+                <div class="code-box">
+                    # テスト用入力値<br>
+                    ' AND SUBSTRING((SELECT password FROM users WHERE username='admin'),1,1)='a' -- 
+                </div>
+            </div>
+
+            <div class="practice-box">
+                <h3>演習4: 対策の実装</h3>
+                <p>学んだ対策を実際に実装してみましょう。</p>
+                <ol>
+                    <li>プリペアドステートメントの実装</li>
+                    <li>入力値バリデーションの追加</li>
+                    <li>エラーハンドリングの実装</li>
+                </ol>
             </div>
         </section>
+    </main>
 
-        <div class="note">
-            <h3>重要な注意点：</h3>
-            <p>この知識は、セキュリティ向上のための教育目的でのみ使用してください。実際のシステムに対する不正アクセスは違法行為となります。</p>
-        </div>
-    </div>
+    <footer>
+        <p>© 2024 SQLインジェクション学習ポータル - 教育目的限定</p>
+    </footer>
 </body>
 </html>

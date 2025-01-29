@@ -19,7 +19,7 @@
             ],
             "html_path": "./KouyaOkamoto_contents/contents/html/sql.html",
             "compose_path": "./KouyaOkamoto_contents/contents/docker/sql_injection/attack/compose.yaml",
-            "url": "http://localhost:8080",
+            "url": "http://localhost:8080/index.php",
             "description": "This task introduces you to blind SQL injection techniques."
         },
         "Advance": {
